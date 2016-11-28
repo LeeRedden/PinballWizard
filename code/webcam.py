@@ -2,10 +2,8 @@ import numpy as np
 import cv2
 import time
 
-
 class webcam(object):
     def __init__(self, device=0, height=100, width=100, interpolation=cv2.INTER_CUBIC):
-        print "here"
         self.cap = cv2.VideoCapture(device)
         self.height = height
         self.width = width
@@ -31,6 +29,13 @@ class webcam(object):
         cv2.waitKey(5)
         cv2.destroyWindow(windowName)
         cv2.waitKey(5)
+
+    def save(self, directory):
+        frame, count = self.image()
+        # Get current time
+        current_time = time.strftime("%Y%m%d%H%M%S")
+        # Save image to directory
+        cv2.imwrite((directory + current_time + "-" + str(count) + ".bmp"), frame)
 
     def close(self):
         self.cap.release()
