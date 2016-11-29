@@ -56,7 +56,7 @@ class reader(object):
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         resize = cv2.resize(gray, (self.width, self.height), interpolation=cv2.INTER_CUBIC)
         reshape = resize.reshape((1, self.height*self.width))
-        return reshape
+        return reshape/255.0
 
 
     def next_batch(self, batch_size):
