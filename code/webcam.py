@@ -1,11 +1,14 @@
 import cv2
 import numpy as np
+import os
 import time
 
 
 class webcam(object):
     def __init__(self, device=0, height=100, width=100, interpolation=cv2.INTER_CUBIC):
         self.cap = cv2.VideoCapture(device)
+        time.sleep(0.1) # this devide isn't ready to use for a certain amount of time
+
         self.height = height
         self.width = width
         self.interpolation = interpolation

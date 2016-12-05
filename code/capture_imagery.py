@@ -1,4 +1,5 @@
-# Data capture
+# Capture Imagere capture
+import argparse
 import datetime
 import errno
 import os
@@ -16,38 +17,36 @@ def ensure_path(path):
 
 
 # Define function for capturing datasets using webcam
-def capture_image_set(number_of_images, directory, sleep_time=3):
-	if os.path.exists(directory)
-		print directory
-	else:
-		print "--------- ERROR: invalid directory ----------"
-		print directory
-		sys.exit()
+def capture_image_set(image_source, number_of_images, directory, sleep_time=3):
+	ensure_path(directory)
 
 	for i in range(number_of_images):
 		# Beep to say an image is being saved
 		sys.stdout.write('\a')
 		sys.stdout.flush()
-		# Save image
-		image_capture.save(directory)
-		# Sleep till next image capture
+
+		image_source.save(directory)
+		print "captured image: %d" % (i)
+
 		time.sleep(sleep_time)
 
 
-# Initialize webcam
-image_capture = webcam.webcam()
-# Sleep to let the webcam initialize
-time.sleep(0.1)
+parser = argparse.ArgumentParser(description='Capture Imagery for a machine learning system')
 
-# Setting up the folder structure for saving the imagery
-# Get directory of this script file
-main_directory = os.getcwd()
+parser.add_argument('room', type=str, help='kitchen, living_room, or dining_room')
+parser.add_argument('--count', type=int, default=15, help='number of images to capture in a single session')
+parser.add_argument('--delay', type=float, default=3.0, help='seconds between image capture')
 
-room_types = ["kitchen", "living_room", "dining_room"]
-for room_type in room_types:
-	ensure_path(os.path.join(main_directory, "imagery", "room_type"))
+args = parser.parse_args()
+print "captureing %d images" % (args.count)
+print " room: %s" % (args.room)
+print " with %d seconds between images" % (args.delay)
 
+if args.room not in ["kitchen", "living_room", "dining_room"]:
+	print "room not a stardard room"
 
-# Example function call to capture an image set
-# This function should be modified according to what dataset you want to collect
-capture_image_set(15, os.path.join(main_directory, "imagery", "kitchen"))
+# wait 5 seconds before captureing the room
+time.sleep(5)
+
+path = os.path.join(os.getcwd(), "imagery", args.room)
+capture_image_set(webcam.webcam(), args.count, path, sleep_time=args.delay)
